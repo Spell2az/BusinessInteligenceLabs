@@ -130,9 +130,12 @@
     <Content Include="AppData\Data set 1.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="AppData\DestinationDatabase.mdf" />
+    <Content Include="AppData\DestinationDatabase.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="AppData\DestinationDatabase_log.ldf">
       <DependentUpon>DestinationDatabase.mdf</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
