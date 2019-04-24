@@ -25,7 +25,7 @@ namespace BusinessInteligenceLabs
         Properties.Settings.Default.Data_set_1ConnectionString;
 
     #endregion
-    bool IsWeekend(DateTime date) => date.ToString("dddd") == "Sunday" || date.ToString("dddd") == "Sunday";
+    bool IsWeekend(DateTime date) => date.ToString("dddd") == "Sunday" || date.ToString("dddd") == "Saturday";
     public Form1()
     {
       InitializeComponent();
