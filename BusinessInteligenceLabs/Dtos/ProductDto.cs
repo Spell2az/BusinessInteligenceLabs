@@ -1,6 +1,6 @@
-﻿namespace BusinessInteligenceLabs.Entities
+﻿namespace BusinessInteligenceLabs.Dtos
 {
-  public class Product
+  public class ProductDto
   {
     public int Id { get; set; }
     public string Category { get; set; }

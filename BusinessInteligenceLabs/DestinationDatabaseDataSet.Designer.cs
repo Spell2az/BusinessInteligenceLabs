@@ -66,14 +66,14 @@ namespace BusinessInteligenceLabs {
             if ((this.DetermineSchemaSerializationMode(info, context) == global::System.Data.SchemaSerializationMode.IncludeSchema)) {
                 global::System.Data.DataSet ds = new global::System.Data.DataSet();
                 ds.ReadXmlSchema(new global::System.Xml.XmlTextReader(new global::System.IO.StringReader(strSchema)));
-                if ((ds.Tables["Customer"] != null)) {
-                    base.Tables.Add(new CustomerDataTable(ds.Tables["Customer"]));
+                if ((ds.Tables["CustomerDto"] != null)) {
+                    base.Tables.Add(new CustomerDataTable(ds.Tables["CustomerDto"]));
                 }
                 if ((ds.Tables["FactTable"] != null)) {
                     base.Tables.Add(new FactTableDataTable(ds.Tables["FactTable"]));
                 }
-                if ((ds.Tables["Product"] != null)) {
-                    base.Tables.Add(new ProductDataTable(ds.Tables["Product"]));
+                if ((ds.Tables["ProductDto"] != null)) {
+                    base.Tables.Add(new ProductDataTable(ds.Tables["ProductDto"]));
                 }
                 if ((ds.Tables["Time"] != null)) {
                     base.Tables.Add(new TimeDataTable(ds.Tables["Time"]));
@@ -203,14 +203,14 @@ namespace BusinessInteligenceLabs {
                 this.Reset();
                 global::System.Data.DataSet ds = new global::System.Data.DataSet();
                 ds.ReadXml(reader);
-                if ((ds.Tables["Customer"] != null)) {
-                    base.Tables.Add(new CustomerDataTable(ds.Tables["Customer"]));
+                if ((ds.Tables["CustomerDto"] != null)) {
+                    base.Tables.Add(new CustomerDataTable(ds.Tables["CustomerDto"]));
                 }
                 if ((ds.Tables["FactTable"] != null)) {
                     base.Tables.Add(new FactTableDataTable(ds.Tables["FactTable"]));
                 }
-                if ((ds.Tables["Product"] != null)) {
-                    base.Tables.Add(new ProductDataTable(ds.Tables["Product"]));
+                if ((ds.Tables["ProductDto"] != null)) {
+                    base.Tables.Add(new ProductDataTable(ds.Tables["ProductDto"]));
                 }
                 if ((ds.Tables["Time"] != null)) {
                     base.Tables.Add(new TimeDataTable(ds.Tables["Time"]));
@@ -248,7 +248,7 @@ namespace BusinessInteligenceLabs {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         internal void InitVars(bool initTable) {
-            this.tableCustomer = ((CustomerDataTable)(base.Tables["Customer"]));
+            this.tableCustomer = ((CustomerDataTable)(base.Tables["CustomerDto"]));
             if ((initTable == true)) {
                 if ((this.tableCustomer != null)) {
                     this.tableCustomer.InitVars();
@@ -260,7 +260,7 @@ namespace BusinessInteligenceLabs {
                     this.tableFactTable.InitVars();
                 }
             }
-            this.tableProduct = ((ProductDataTable)(base.Tables["Product"]));
+            this.tableProduct = ((ProductDataTable)(base.Tables["ProductDto"]));
             if ((initTable == true)) {
                 if ((this.tableProduct != null)) {
                     this.tableProduct.InitVars();
@@ -424,7 +424,7 @@ namespace BusinessInteligenceLabs {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public CustomerDataTable() {
-                this.TableName = "Customer";
+                this.TableName = "CustomerDto";
                 this.BeginInit();
                 this.InitClass();
                 this.EndInit();
@@ -1152,7 +1152,7 @@ namespace BusinessInteligenceLabs {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public ProductDataTable() {
-                this.TableName = "Product";
+                this.TableName = "ProductDto";
                 this.BeginInit();
                 this.InitClass();
                 this.EndInit();
@@ -2573,7 +2573,7 @@ namespace BusinessInteligenceLabs.DestinationDatabaseDataSetTableAdapters {
             this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
             global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
             tableMapping.SourceTable = "Table";
-            tableMapping.DataSetTable = "Customer";
+            tableMapping.DataSetTable = "CustomerDto";
             tableMapping.ColumnMappings.Add("Id", "Id");
             tableMapping.ColumnMappings.Add("name", "name");
             tableMapping.ColumnMappings.Add("country", "country");
@@ -2585,7 +2585,7 @@ namespace BusinessInteligenceLabs.DestinationDatabaseDataSetTableAdapters {
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [dbo].[Customer] WHERE (([Id] = @Original_Id) AND ([name] = @Original_name) AND ([country] = @Original_country) AND ([city] = @Original_city) AND ([state] = @Original_state) AND ([postalCode] = @Original_postalCode) AND ([region] = @Original_region) AND ([reference] = @Original_reference))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [dbo].[CustomerDto] WHERE (([Id] = @Original_Id) AND ([name] = @Original_name) AND ([country] = @Original_country) AND ([city] = @Original_city) AND ([state] = @Original_state) AND ([postalCode] = @Original_postalCode) AND ([region] = @Original_region) AND ([reference] = @Original_reference))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_name", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "name", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
@@ -2597,8 +2597,8 @@ namespace BusinessInteligenceLabs.DestinationDatabaseDataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_reference", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reference", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[Customer] ([name], [country], [city], [state], [postalCode], [region], [reference]) VALUES (@name, @country, @city, @state, @postalCode, @region, @reference);
-SELECT Id, name, country, city, state, postalCode, region, reference FROM Customer WHERE (Id = SCOPE_IDENTITY())";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[CustomerDto] ([name], [country], [city], [state], [postalCode], [region], [reference]) VALUES (@name, @country, @city, @state, @postalCode, @region, @reference);
+SELECT Id, name, country, city, state, postalCode, region, reference FROM CustomerDto WHERE (Id = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@name", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "name", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@country", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "country", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2609,8 +2609,8 @@ SELECT Id, name, country, city, state, postalCode, region, reference FROM Custom
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reference", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reference", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[Customer] SET [name] = @name, [country] = @country, [city] = @city, [state] = @state, [postalCode] = @postalCode, [region] = @region, [reference] = @reference WHERE (([Id] = @Original_Id) AND ([name] = @Original_name) AND ([country] = @Original_country) AND ([city] = @Original_city) AND ([state] = @Original_state) AND ([postalCode] = @Original_postalCode) AND ([region] = @Original_region) AND ([reference] = @Original_reference));
-SELECT Id, name, country, city, state, postalCode, region, reference FROM Customer WHERE (Id = @Id)";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[CustomerDto] SET [name] = @name, [country] = @country, [city] = @city, [state] = @state, [postalCode] = @postalCode, [region] = @region, [reference] = @reference WHERE (([Id] = @Original_Id) AND ([name] = @Original_name) AND ([country] = @Original_country) AND ([city] = @Original_city) AND ([state] = @Original_state) AND ([postalCode] = @Original_postalCode) AND ([region] = @Original_region) AND ([reference] = @Original_reference));
+SELECT Id, name, country, city, state, postalCode, region, reference FROM CustomerDto WHERE (Id = @Id)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@name", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "name", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@country", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "country", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2683,7 +2683,7 @@ SELECT Id, name, country, city, state, postalCode, region, reference FROM Custom
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         public virtual int Update(DestinationDatabaseDataSet dataSet) {
-            return this.Adapter.Update(dataSet, "Customer");
+            return this.Adapter.Update(dataSet, "CustomerDto");
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3424,7 +3424,7 @@ SELECT productId, timeId, customerId, value, discount, profit, quantity FROM Fac
             this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
             global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
             tableMapping.SourceTable = "Table";
-            tableMapping.DataSetTable = "Product";
+            tableMapping.DataSetTable = "ProductDto";
             tableMapping.ColumnMappings.Add("Id", "Id");
             tableMapping.ColumnMappings.Add("category", "category");
             tableMapping.ColumnMappings.Add("subcategory", "subcategory");
@@ -3433,7 +3433,7 @@ SELECT productId, timeId, customerId, value, discount, profit, quantity FROM Fac
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[Product] WHERE (([Id] = @Original_Id) AND ([category] = @Origi" +
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[ProductDto] WHERE (([Id] = @Original_Id) AND ([category] = @Origi" +
                 "nal_category) AND ([subcategory] = @Original_subcategory) AND ([name] = @Origina" +
                 "l_name) AND ([reference] = @Original_reference))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
@@ -3444,9 +3444,9 @@ SELECT productId, timeId, customerId, value, discount, profit, quantity FROM Fac
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_reference", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reference", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[Product] ([category], [subcategory], [name], [reference]) VALU" +
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[ProductDto] ([category], [subcategory], [name], [reference]) VALU" +
                 "ES (@category, @subcategory, @name, @reference);\r\nSELECT Id, category, subcatego" +
-                "ry, name, reference FROM Product WHERE (Id = SCOPE_IDENTITY())";
+                "ry, name, reference FROM ProductDto WHERE (Id = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@category", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "category", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@subcategory", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "subcategory", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -3454,8 +3454,8 @@ SELECT productId, timeId, customerId, value, discount, profit, quantity FROM Fac
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@reference", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "reference", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[Product] SET [category] = @category, [subcategory] = @subcategory, [name] = @name, [reference] = @reference WHERE (([Id] = @Original_Id) AND ([category] = @Original_category) AND ([subcategory] = @Original_subcategory) AND ([name] = @Original_name) AND ([reference] = @Original_reference));
-SELECT Id, category, subcategory, name, reference FROM Product WHERE (Id = @Id)";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[ProductDto] SET [category] = @category, [subcategory] = @subcategory, [name] = @name, [reference] = @reference WHERE (([Id] = @Original_Id) AND ([category] = @Original_category) AND ([subcategory] = @Original_subcategory) AND ([name] = @Original_name) AND ([reference] = @Original_reference));
+SELECT Id, category, subcategory, name, reference FROM ProductDto WHERE (Id = @Id)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@category", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "category", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@subcategory", global::System.Data.SqlDbType.NChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "subcategory", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -3482,7 +3482,7 @@ SELECT Id, category, subcategory, name, reference FROM Product WHERE (Id = @Id)"
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Id, category, subcategory, name, reference FROM dbo.Product";
+            this._commandCollection[0].CommandText = "SELECT Id, category, subcategory, name, reference FROM dbo.ProductDto";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -3521,7 +3521,7 @@ SELECT Id, category, subcategory, name, reference FROM Product WHERE (Id = @Id)"
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         public virtual int Update(DestinationDatabaseDataSet dataSet) {
-            return this.Adapter.Update(dataSet, "Product");
+            return this.Adapter.Update(dataSet, "ProductDto");
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
