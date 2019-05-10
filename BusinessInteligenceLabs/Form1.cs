@@ -18,10 +18,10 @@ namespace BusinessInteligenceLabs
   {
 
     #region Get Connection strings
-    private string GetDestinationDbConnectionString =>
+    private string DestinationDbConnectionString =>
         Properties.Settings.Default.DestinationDatabaseConnectionString;
 
-    private string GetDataSet1DbConnectionString =>
+    private string Source1DbConnectionString =>
         Properties.Settings.Default.Data_set_1ConnectionString;
 
     #endregion
@@ -29,6 +29,7 @@ namespace BusinessInteligenceLabs
     public Form1()
     {
       InitializeComponent();
+      
     }
 
 
@@ -149,7 +150,7 @@ namespace BusinessInteligenceLabs
     {
       var dates = new List<TimeDto>();
     
-      using (OleDbConnection connection = new OleDbConnection(GetDataSet1DbConnectionString))
+      using (OleDbConnection connection = new OleDbConnection(Source1DbConnectionString))
       {
         connection.Open();
         var getDates = new OleDbCommand(@"SELECT [Order Date], [Ship Date]
@@ -169,7 +170,7 @@ namespace BusinessInteligenceLabs
     {
       var customers = new List<CustomerDto>();
 
-      using (OleDbConnection connection = new OleDbConnection(GetDataSet1DbConnectionString))
+      using (OleDbConnection connection = new OleDbConnection(Source1DbConnectionString))
       {
         connection.Open();
         var getDates = new OleDbCommand(@"
@@ -198,7 +199,7 @@ namespace BusinessInteligenceLabs
     {
       var products = new List<ProductDto>();
 
-      using (OleDbConnection connection = new OleDbConnection(GetDataSet1DbConnectionString))
+      using (OleDbConnection connection = new OleDbConnection(Source1DbConnectionString))
       {
         connection.Open();
         var getDates = new OleDbCommand(@"
@@ -290,5 +291,59 @@ namespace BusinessInteligenceLabs
 
     } 
     #endregion
+
+    private int GetTimeId(TimeDto time)
+    {
+      using (SqlConnection connection = new SqlConnection(DestinationDbConnectionString))
+      {
+        connection.Open();
+
+        var query = @"SELECT id FROM Time WHERE date = @date";
+        var command = new SqlCommand(query, connection);
+        command.Parameters.AddWithValue("@date", time.Date);
+
+        using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
+        {
+          if (reader.HasRows)
+          {
+            while (reader.Read())
+            {
+              return Convert.ToInt32(reader["id"]);
+            }
+            
+          }
+        }
+      }
+      return -1;
+    }
+
+    
+
+    private IEnumerable<TimeDto> GetFromDimensionTime()
+    {
+      var result = new List<TimeDto>();
+      using (SqlConnection connection = new SqlConnection(DestinationDbConnectionString))
+      {
+        connection.Open();
+        var query = @"SELECT id, date  from Time";
+        var command = new SqlCommand(query, connection);
+
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+          while (reader.Read())
+          {
+            result.Add(new TimeDto(reader, 1));
+          }
+        }
+      }
+      return result;
+    }
+    private void btnGetTimeFromDestination_Click(object sender, EventArgs e)
+    {
+      var times = GetFromDimensionTime();
+      lstDestinationTimes.DataSource = times;
+
+      Debug.WriteLine("Id is " +GetTimeId(new TimeDto(new DateTime(2014, 1, 3))));
+    }
   }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Runtime.InteropServices;
 
 namespace BusinessInteligenceLabs.Dtos
@@ -12,7 +13,15 @@ namespace BusinessInteligenceLabs.Dtos
       this.dateTime = dateTime;
     }
 
-    public int Id { get; set; }
+    public TimeDto(SqlDataReader reader, int readerDatePosition)
+    {
+      dateTime = reader.GetDateTime(readerDatePosition);
+      Id = Convert.ToInt32(reader["id"]);
+    }
+      
+    
+
+    public int Id { get; private set; }
     public string DayName => dateTime.DayOfWeek.ToString();
     public int DayNumber => (int) dateTime.DayOfWeek;
     public string MonthName => dateTime.ToString("MMMM");

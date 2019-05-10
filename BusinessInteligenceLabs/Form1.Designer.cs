@@ -34,6 +34,8 @@
       this.sheet1BindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.data_set_1DataSet = new BusinessInteligenceLabs.Data_set_1DataSet();
       this.sheet1TableAdapter = new BusinessInteligenceLabs.Data_set_1DataSetTableAdapters.Sheet1TableAdapter();
+      this.btnTimeIds = new System.Windows.Forms.Button();
+      this.lstDestinationTimes = new System.Windows.Forms.ListBox();
       ((System.ComponentModel.ISupportInitialize)(this.sheet1BindingSource)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.data_set_1DataSet)).BeginInit();
       this.SuspendLayout();
@@ -73,11 +75,34 @@
       // 
       this.sheet1TableAdapter.ClearBeforeFill = true;
       // 
+      // btnTimeIds
+      // 
+      this.btnTimeIds.Location = new System.Drawing.Point(442, 79);
+      this.btnTimeIds.Name = "btnTimeIds";
+      this.btnTimeIds.Size = new System.Drawing.Size(234, 23);
+      this.btnTimeIds.TabIndex = 2;
+      this.btnTimeIds.Text = "Get from destination Times";
+      this.btnTimeIds.UseVisualStyleBackColor = true;
+      this.btnTimeIds.Click += new System.EventHandler(this.btnGetTimeFromDestination_Click);
+      // 
+      // lstDestinationTimes
+      // 
+      this.lstDestinationTimes.DataSource = this.sheet1BindingSource;
+      this.lstDestinationTimes.DisplayMember = "Order TimeDto";
+      this.lstDestinationTimes.FormattingEnabled = true;
+      this.lstDestinationTimes.HorizontalScrollbar = true;
+      this.lstDestinationTimes.Location = new System.Drawing.Point(442, 135);
+      this.lstDestinationTimes.Name = "lstDestinationTimes";
+      this.lstDestinationTimes.Size = new System.Drawing.Size(192, 277);
+      this.lstDestinationTimes.TabIndex = 3;
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(800, 450);
+      this.Controls.Add(this.lstDestinationTimes);
+      this.Controls.Add(this.btnTimeIds);
       this.Controls.Add(this.lstDates);
       this.Controls.Add(this.btnGetDates);
       this.Name = "Form1";
@@ -95,6 +120,8 @@
         private Data_set_1DataSet data_set_1DataSet;
         private System.Windows.Forms.BindingSource sheet1BindingSource;
         private Data_set_1DataSetTableAdapters.Sheet1TableAdapter sheet1TableAdapter;
-    }
+    private System.Windows.Forms.Button btnTimeIds;
+    private System.Windows.Forms.ListBox lstDestinationTimes;
+  }
 }
 
