@@ -71,8 +71,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DestinationDatabaseDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Entities\Customer.cs" />
-    <Compile Include="Entities\Product.cs" />
+    <Compile Include="Dtos\CustomerDto.cs" />
+    <Compile Include="Dtos\TimeDto.cs" />
+    <Compile Include="Dtos\ProductDto.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,11 +134,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="AppData\DestinationDatabase.mdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="AppData\DestinationDatabase_log.ldf">
       <DependentUpon>DestinationDatabase.mdf</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

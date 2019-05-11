@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BusinessInteligenceLabs.Entities;
+using BusinessInteligenceLabs.Dtos;
 
 namespace BusinessInteligenceLabs
 {
@@ -18,34 +18,35 @@ namespace BusinessInteligenceLabs
   {
 
     #region Get Connection strings
-    private string GetDestinationDbConnectionString =>
+    private string DestinationDbConnectionString =>
         Properties.Settings.Default.DestinationDatabaseConnectionString;
 
-    private string GetDataSet1DbConnectionString =>
+    private string Source1DbConnectionString =>
         Properties.Settings.Default.Data_set_1ConnectionString;
 
     #endregion
-    bool IsWeekend(DateTime date) => date.ToString("dddd") == "Sunday" || date.ToString("dddd") == "Saturday";
+    
     public Form1()
     {
       InitializeComponent();
+      
     }
 
 
     private async void btnGetDates_ClickAsync(object sender, EventArgs e)
     {
-      var dates = await GetCustomers();
+      var times = await GetTimes();
       lstDates.DataSource = null;
       lstDates.Items.Clear();
 
-     lstDates.DataSource = dates.Select(d => d.Name).ToList();
-      Debug.WriteLine("Unique Dates in a list " + dates.Distinct().Count());
-      //InsertTimeDimensionRecords(dates);
+     lstDates.DataSource = times.ToList();
+      Debug.WriteLine("Unique Dates in a list " + times.Distinct().Count());
+      //InsertTimeDimensionRecords(times);
     }
 
 
     #region Insert range
-    private void InsertTimeDimensionRecords(IEnumerable<DateTime> dates)
+    private void InsertTimeDimensionRecords(IEnumerable<TimeDto> times)
     {
       var connectionString = Properties.Settings.Default.DestinationDatabaseConnectionString;
 
@@ -53,17 +54,17 @@ namespace BusinessInteligenceLabs
       {
         connection.Open();
 
-        foreach (var date in dates)
+        foreach (var time in times)
         {
-          if (!IsDateIsPresentInDatabase(connection, date))
+          if (!IsDateIsPresentInDatabase(connection, time))
           {
-            InsertDate(connection, date);
+            InsertDate(connection, time);
           }
         }
       }
     }
 
-    private void InsertProductDimensionRecords(IEnumerable<Product> products)
+    private void InsertProductDimensionRecords(IEnumerable<ProductDto> products)
     {
       var connectionString = Properties.Settings.Default.DestinationDatabaseConnectionString;
 
@@ -81,7 +82,7 @@ namespace BusinessInteligenceLabs
       }
     }
 
-    private void InsertCustomerDimensionRecords(IEnumerable<Customer> customers)
+    private void InsertCustomerDimensionRecords(IEnumerable<CustomerDto> customers)
     {
       var connectionString = Properties.Settings.Default.DestinationDatabaseConnectionString;
 
@@ -100,12 +101,12 @@ namespace BusinessInteligenceLabs
     } 
     #endregion
     #region Check if entity is present functions 
-    private bool IsProductPresentInDatabase(SqlConnection connection, Product product)
+    private bool IsProductPresentInDatabase(SqlConnection connection, ProductDto productDto)
     {
       bool isPresent;
 
-      var command = new SqlCommand("SELECT id from Product where product.Name = @name", connection);
-      command.Parameters.Add(new SqlParameter("@name", product.Name));
+      var command = new SqlCommand("SELECT id from ProductDto where productDto.Name = @name", connection);
+      command.Parameters.Add(new SqlParameter("@name", productDto.Name));
 
       using (SqlDataReader reader = command.ExecuteReader())
       {
@@ -114,12 +115,12 @@ namespace BusinessInteligenceLabs
 
       return isPresent;
     }
-    private bool IsCustomerPresentInDatabase(SqlConnection connection, Customer customer)
+    private bool IsCustomerPresentInDatabase(SqlConnection connection, CustomerDto customerDto)
     {
       bool isPresent;
 
-      var command = new SqlCommand("SELECT id from Customer where product.Name = @name", connection);
-      command.Parameters.Add(new SqlParameter("@name", customer.Name));
+      var command = new SqlCommand("SELECT id from CustomerDto where productDto.Name = @name", connection);
+      command.Parameters.Add(new SqlParameter("@name", customerDto.Name));
 
       using (SqlDataReader reader = command.ExecuteReader())
       {
@@ -128,12 +129,12 @@ namespace BusinessInteligenceLabs
 
       return isPresent;
     }
-    private bool IsDateIsPresentInDatabase(SqlConnection connection, DateTime date)
+    private bool IsDateIsPresentInDatabase(SqlConnection connection, TimeDto time)
     {
       bool isPresent;
 
       var command = new SqlCommand("SELECT id from Time where date = @date", connection);
-      command.Parameters.Add(new SqlParameter("@date", date));
+      command.Parameters.Add(new SqlParameter("@date", time.Date));
 
       using (SqlDataReader reader = command.ExecuteReader())
       {
@@ -143,14 +144,13 @@ namespace BusinessInteligenceLabs
       return isPresent;
     } 
     #endregion
-    #region OLEDb Getters 
-    private async Task<List<DateTime>> GetDates()
-    {
-      var dates = new List<DateTime>();
-      lstDates.DataSource = null;
-      lstDates.Items.Clear();
 
-      using (OleDbConnection connection = new OleDbConnection(GetDataSet1DbConnectionString))
+    #region OLEDb Getters 
+    private async Task<List<TimeDto>> GetTimes()
+    {
+      var dates = new List<TimeDto>();
+    
+      using (OleDbConnection connection = new OleDbConnection(Source1DbConnectionString))
       {
         connection.Open();
         var getDates = new OleDbCommand(@"SELECT [Order Date], [Ship Date]
@@ -159,28 +159,28 @@ namespace BusinessInteligenceLabs
         var reader = await getDates.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
-          dates.Add(reader.GetDateTime(0));
-          dates.Add(reader.GetDateTime(1));
+          dates.Add(new TimeDto(reader.GetDateTime(0)));
+          dates.Add(new TimeDto(reader.GetDateTime(1)));
         }
       }
 
       return dates;
     }
-    private async Task<List<Customer>> GetCustomers()
+    private async Task<List<CustomerDto>> GetCustomers()
     {
-      var customers = new List<Customer>();
+      var customers = new List<CustomerDto>();
 
-      using (OleDbConnection connection = new OleDbConnection(GetDataSet1DbConnectionString))
+      using (OleDbConnection connection = new OleDbConnection(Source1DbConnectionString))
       {
         connection.Open();
         var getDates = new OleDbCommand(@"
-                SELECT [Customer Name], Country, City, State, [Postal Code], Region
+                SELECT [CustomerDto Name], Country, City, State, [Postal Code], Region
                 FROM Sheet1", connection);
 
         var reader = await getDates.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
-          customers.Add(new Customer()
+          customers.Add(new CustomerDto()
           {
             Name = reader.GetFieldValue<string>(0),
             Country = reader.GetFieldValue<string>(1),
@@ -195,21 +195,21 @@ namespace BusinessInteligenceLabs
 
       return customers;
     }
-    private async Task<List<Product>> GetProducts()
+    private async Task<List<ProductDto>> GetProducts()
     {
-      var products = new List<Product>();
+      var products = new List<ProductDto>();
 
-      using (OleDbConnection connection = new OleDbConnection(GetDataSet1DbConnectionString))
+      using (OleDbConnection connection = new OleDbConnection(Source1DbConnectionString))
       {
         connection.Open();
         var getDates = new OleDbCommand(@"
-                SELECT Category, [Sub-Category], [Product Name]
+                SELECT Category, [Sub-Category], [ProductDto Name]
                 FROM Sheet1", connection);
 
         var reader = await getDates.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
-          products.Add(new Product()
+          products.Add(new ProductDto()
           {
             Category = reader.GetFieldValue<string>(0),
             Subcategory = reader.GetFieldValue<string>(1),
@@ -223,22 +223,22 @@ namespace BusinessInteligenceLabs
     #endregion
     #region Single Record Inserts
 
-    private void InsertDate(SqlConnection connection, DateTime date)
+    private void InsertDate(SqlConnection connection, TimeDto time)
     {
       var insertCommand = new SqlCommand(@"INSERT INTO Time (dayName, dayNumber, monthName, monthNumber, weekNumber, year, weekend, date, dayOfYear)
                                                         VALUES (@dayName, @dayNumber, @monthName, @monthNumber, @weekNumber, @year, @weekend, @date, @dayOfYear)", connection);
 
       SqlParameter[] parameterList =
       {
-                    new SqlParameter("@dayName", date.ToString("dddd")),
-                    new SqlParameter("@dayNumber", date.DayOfWeek),
-                    new SqlParameter("@monthName", date.ToString("MMMM")),
-                    new SqlParameter("@monthNumber", date.Month),
-                    new SqlParameter("@weekNumber", (int)date.DayOfYear/7),
-                    new SqlParameter("@year", date.Year),
-                    new SqlParameter("@weekend", IsWeekend(date)),
-                    new SqlParameter("@date", date),
-                    new SqlParameter("@dayOfYear", date.DayOfYear)
+                    new SqlParameter("@dayName", time.DayName),
+                    new SqlParameter("@dayNumber", time.DayNumber),
+                    new SqlParameter("@monthName", time.MonthName),
+                    new SqlParameter("@monthNumber", time.MonthNumber),
+                    new SqlParameter("@weekNumber", time.WeekNumber),
+                    new SqlParameter("@year", time.Year ),
+                    new SqlParameter("@weekend", time.Weekend),
+                    new SqlParameter("@date", time.Date),
+                    new SqlParameter("@dayOfYear", time.DayOfYear)
                 };
       insertCommand.Parameters.AddRange(parameterList);
 
@@ -248,16 +248,16 @@ namespace BusinessInteligenceLabs
       }
 
     }
-    private void InsertProduct(SqlConnection connection, Product product)
+    private void InsertProduct(SqlConnection connection, ProductDto productDto)
     {
-      var insertCommand = new SqlCommand(@"INSERT INTO Product (category, subcategory, name)
+      var insertCommand = new SqlCommand(@"INSERT INTO ProductDto (category, subcategory, name)
                                                         VALUES (@category, @subcategory, @name)", connection);
 
       SqlParameter[] parameterList =
       {
-        new SqlParameter("@category", product.Category),
-        new SqlParameter("@subcategory", product.Subcategory),
-        new SqlParameter("@name", product.Name),
+        new SqlParameter("@category", productDto.Category),
+        new SqlParameter("@subcategory", productDto.Subcategory),
+        new SqlParameter("@name", productDto.Name),
 
       };
       insertCommand.Parameters.AddRange(parameterList);
@@ -268,18 +268,18 @@ namespace BusinessInteligenceLabs
       }
 
     }
-    private void InsertCustomer(SqlConnection connection, Customer customer)
+    private void InsertCustomer(SqlConnection connection, CustomerDto customerDto)
     {
-      var insertCommand = new SqlCommand(@"INSERT INTO Product (name, country, city, state, postalCode, region)
+      var insertCommand = new SqlCommand(@"INSERT INTO ProductDto (name, country, city, state, postalCode, region)
                                                         VALUES (@name, @country, @city, @state, @postalCode, @region)", connection);
 
       SqlParameter[] parameterList =
       {
-        new SqlParameter("@name", customer.Name),
-        new SqlParameter("@country", customer.Country),
-        new SqlParameter("@city", customer.City),
-        new SqlParameter("@state", customer.State),
-        new SqlParameter("@region", customer.Region),
+        new SqlParameter("@name", customerDto.Name),
+        new SqlParameter("@country", customerDto.Country),
+        new SqlParameter("@city", customerDto.City),
+        new SqlParameter("@state", customerDto.State),
+        new SqlParameter("@region", customerDto.Region),
 
       };
       insertCommand.Parameters.AddRange(parameterList);
@@ -291,5 +291,59 @@ namespace BusinessInteligenceLabs
 
     } 
     #endregion
+
+    private int GetTimeId(TimeDto time)
+    {
+      using (SqlConnection connection = new SqlConnection(DestinationDbConnectionString))
+      {
+        connection.Open();
+
+        var query = @"SELECT id FROM Time WHERE date = @date";
+        var command = new SqlCommand(query, connection);
+        command.Parameters.AddWithValue("@date", time.Date);
+
+        using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
+        {
+          if (reader.HasRows)
+          {
+            while (reader.Read())
+            {
+              return Convert.ToInt32(reader["id"]);
+            }
+            
+          }
+        }
+      }
+      return -1;
+    }
+
+    
+
+    private IEnumerable<TimeDto> GetFromDimensionTime()
+    {
+      var result = new List<TimeDto>();
+      using (SqlConnection connection = new SqlConnection(DestinationDbConnectionString))
+      {
+        connection.Open();
+        var query = @"SELECT id, date  from Time";
+        var command = new SqlCommand(query, connection);
+
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+          while (reader.Read())
+          {
+            result.Add(new TimeDto(reader, 1));
+          }
+        }
+      }
+      return result;
+    }
+    private void btnGetTimeFromDestination_Click(object sender, EventArgs e)
+    {
+      var times = GetFromDimensionTime();
+      lstDestinationTimes.DataSource = times;
+
+      Debug.WriteLine("Id is " +GetTimeId(new TimeDto(new DateTime(2014, 1, 3))));
+    }
   }
 }
