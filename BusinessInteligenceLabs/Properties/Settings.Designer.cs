@@ -44,5 +44,16 @@ namespace BusinessInteligenceLabs.Properties {
                 return ((string)(this["DestinationDatabaseConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\\AppData\\DataSet2.ac" +
+            "cdb;Persist Security Info=True")]
+        public string DataSet2ConnectionString {
+            get {
+                return ((string)(this["DataSet2ConnectionString"]));
+            }
+        }
     }
 }
