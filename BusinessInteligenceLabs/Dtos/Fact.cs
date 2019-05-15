@@ -46,7 +46,7 @@ namespace BusinessInteligenceLabs.Dtos
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return ProductId == other.ProductId && TimeId == other.TimeId && CustomerId == other.CustomerId && Value == other.Value && Discount.Equals(other.Discount) && Profit == other.Profit && Quantity == other.Quantity;
+            return ProductId == other.ProductId && TimeId == other.TimeId && CustomerId == other.CustomerId;
         }
 
         public override bool Equals(object obj)
@@ -64,10 +64,7 @@ namespace BusinessInteligenceLabs.Dtos
                 var hashCode = ProductId;
                 hashCode = (hashCode * 397) ^ TimeId;
                 hashCode = (hashCode * 397) ^ CustomerId;
-                hashCode = (hashCode * 397) ^ Value.GetHashCode();
-                hashCode = (hashCode * 397) ^ Discount.GetHashCode();
-                hashCode = (hashCode * 397) ^ Profit.GetHashCode();
-                hashCode = (hashCode * 397) ^ Quantity;
+               
                 return hashCode;
             }
         }
