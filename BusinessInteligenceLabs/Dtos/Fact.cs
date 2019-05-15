@@ -25,7 +25,7 @@ namespace BusinessInteligenceLabs.Dtos
             Value = Convert.ToDecimal(reader["Sales"]);
             Discount = Convert.ToDouble(reader["Discount"]);
             Profit = Convert.ToDecimal(reader["Profit"]);
-            Quantity = Convert.ToInt32(reader["quantity"]);
+            Quantity = Convert.ToInt32(reader["Quantity"]);
         }
 
         public int ProductId { get; set; }
