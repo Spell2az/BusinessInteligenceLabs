@@ -1,21 +1,20 @@
-﻿using System;
+﻿using BusinessInteligenceLabs.Dtos;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using BusinessInteligenceLabs.Dtos;
 
 namespace BusinessInteligenceLabs
 {
     public partial class Form1 : Form
     {
+
+
 
         #region Get Connection strings
         private string DestinationDbConnectionString => Properties.Settings.Default.DestinationDatabaseConnectionString;
@@ -29,6 +28,58 @@ namespace BusinessInteligenceLabs
             listBox.DataSource = null;
             listBox.Items.Clear();
             listBox.DataSource = listItems;
+        }
+
+        private bool IsSourceValid(IDataReader reader)
+        {
+            var rules = new List<Func<IDataReader, bool>>()
+            {
+                r =>  new Regex(@"([A-Z]{2})-\d{5}").IsMatch(reader["Customer ID"].ToString()),
+                r => Decimal.TryParse(reader["Sales"].ToString(),  out decimal _),
+                r => Double.TryParse(reader["Discount"].ToString(), out double _),
+                r => Decimal.TryParse(reader["Profit"].ToString(),  out decimal _),
+                r => Int32.TryParse(reader["Quantity"].ToString(),  out int _),
+
+
+            };
+            return rules.All(rule => rule(reader));
+        }
+
+        private void TestSource()
+        {
+            var total = 0;
+       
+            var validIds = new List<string>();
+            var invalidIds = new List<string>();
+            using (OleDbConnection connection = new OleDbConnection(Source2DbConnectionString))
+            {
+                connection.Open();
+
+                var query = @"SELECT       [Row ID], [Order Date], [Ship Date], [Customer ID], [Customer Name], Country, City, State, [Postal Code], Region, [Product ID], Category, [Sub-Category], [Product Name], Sales, Quantity, Discount, Profit
+                                FROM            [Student Sample 2 - Sheet1]";
+
+                var command = new OleDbCommand(query, connection);
+
+                using (OleDbDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (IsSourceValid(reader))
+                        {
+                            validIds.Add(reader["Row ID"].ToString());
+                        }
+                        else
+                        {
+                            invalidIds.Add(reader["Row ID"].ToString());
+                        }
+                        total++;
+                    }
+                }
+            }
+
+            Debug.WriteLine($@"Total: {total} 
+                               Valid: {validIds.Count} - {string.Join(" ", validIds)} 
+                               NotValid: {invalidIds.Count} - {string.Join(" ", invalidIds)}");
         }
 
         #region Form Constructor & Load handler
@@ -600,8 +651,12 @@ namespace BusinessInteligenceLabs
             }
         }
 
+
         #endregion
 
-
+        private void button3_Click(object sender, EventArgs e)
+        {
+            TestSource();
+        }
     }
 }
