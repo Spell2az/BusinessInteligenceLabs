@@ -25,7 +25,7 @@ namespace BusinessInteligenceLabs
         #endregion
 
         private void FillListBox<T>(ListBox listBox, IEnumerable<T> listItems)
-        {
+        { 
             listBox.DataSource = null;
             listBox.Items.Clear();
             listBox.DataSource = listItems;
